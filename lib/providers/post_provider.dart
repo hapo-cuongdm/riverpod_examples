@@ -23,7 +23,7 @@ final canGoToForwardPageProvider = Provider<bool>((ref) {
   return ref.watch(pageIndexProvider) != 4;
 });
 
-final postListProvider = FutureProvider.autoDispose((ref) {
+final postListProvider = FutureProvider.autoDispose<List<Post>>((ref) {
   return PostService().getPostList();
 });
 

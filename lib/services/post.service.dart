@@ -13,8 +13,13 @@ class PostService extends StateNotifier<List<Post>> {
     Response response = await Dio().get('$url/posts');
 
     if (response.statusCode == 200) {
-      final List result = jsonDecode(response.data);
-      return result.map((e) => Post.fromJson(e)).toList();
+      // final List result = jsonDecode(response.data);
+      // return result.map((e) => Post.fromJson(e)).toList();
+      List<Post> posts = [];
+      for (var item in response.data) {
+        posts.add(Post.fromJson(item));
+      }
+      return posts;
     } else {
       throw Exception("error api");
     }
@@ -35,9 +40,7 @@ class PostService extends StateNotifier<List<Post>> {
     try {
       final response = await Dio().get('$url/posts/$id');
       Post post = Post(id: '', title: '', body: '');
-      if (response.statusCode == 200) {
-        post = Post.fromJson(response.data);
-      }
+      if (response.statusCode == 200) post = Post.fromJson(response.data);
       return post;
     } catch (e) {
       throw Exception(e);

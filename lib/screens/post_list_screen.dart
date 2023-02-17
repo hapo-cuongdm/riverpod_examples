@@ -14,8 +14,9 @@ class PostListScreen extends ConsumerStatefulWidget {
 class _PostListScreenState extends ConsumerState<PostListScreen> {
   @override
   Widget build(BuildContext context) {
-    final _data = ref.watch(postListProvider);
-    print(_data);
+    final data = ref.watch(postListProvider);
+    print(data);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Post List"),
@@ -33,21 +34,21 @@ class _PostListScreenState extends ConsumerState<PostListScreen> {
         ],
       ),
       body: Center(
-        child: _data.when(
-          data: (_data) {
+        child: data.when(
+          data: (data) {
             return ListView.builder(
-              itemCount: _data.length,
+              itemCount: data.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  title: Text(_data[index].title!),
-                  subtitle: Text(_data[index].body!),
+                  title: Text(data[index].title!),
+                  subtitle: Text(data[index].body!),
                   tileColor:
                       index % 2 == 0 ? Colors.amber[100] : Colors.green[100],
                   trailing: TextButton(
                     onPressed: () {
                       ref
                           .read(postProvider.notifier)
-                          .deletePost(_data[index].id);
+                          .deletePost(data[index].id);
                     },
                     child: const Text("Delete"),
                   ),
@@ -56,7 +57,7 @@ class _PostListScreenState extends ConsumerState<PostListScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              FormUpdatePost(id: _data[index].id!)),
+                              FormUpdatePost(id: data[index].id!)),
                     );
                   },
                 );

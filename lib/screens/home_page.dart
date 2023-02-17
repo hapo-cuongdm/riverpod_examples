@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_examples/screens/notifier_provider_page.dart';
+import 'package:riverpod_examples/screens/counter_screen.dart';
+import 'package:riverpod_examples/screens/paginate_screen.dart';
+import 'package:riverpod_examples/screens/post_list_screen.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -26,14 +28,26 @@ class HomePage extends ConsumerWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => NotifierProviderPage(),
+                      builder: (context) => CounterScreen(),
                     ));
               },
             ),
             ListTile(
-              title: const Text('Item 2'),
+              title: const Text('State Provider'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PaginateScreen()));
+              },
+            ),
+            ListTile(
+              title: const Text('Post List'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PostListScreen()));
               },
             ),
           ],

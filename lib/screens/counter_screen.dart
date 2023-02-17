@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_examples/providers/post_provider.dart';
 
-class Counter extends Notifier<int> {
-  @override
-  int build() {
-    return 0;
-  }
-
-  void increase() {
-    state++;
-  }
-}
-
-class NotifierProviderPage extends ConsumerWidget {
-  NotifierProviderPage({super.key});
+class CounterScreen extends ConsumerWidget {
+  CounterScreen({super.key});
   final counterProvder = NotifierProvider<Counter, int>(Counter.new);
 
   @override

@@ -12,10 +12,21 @@ class PostListScreen extends ConsumerStatefulWidget {
 }
 
 class _PostListScreenState extends ConsumerState<PostListScreen> {
+
+  void deletePost(id) {
+    ref.read(postNotifierData.notifier).deletePost(id);
+  }
+
+  void navigateToFormUpdate(id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FormUpdatePost(id: id)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final data = ref.watch(postListProvider);
-    print(data);
 
     return Scaffold(
       appBar: AppBar(
@@ -33,39 +44,34 @@ class _PostListScreenState extends ConsumerState<PostListScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: data.when(
-          data: (data) {
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(data[index].title!),
-                  subtitle: Text(data[index].body!),
-                  tileColor:
-                      index % 2 == 0 ? Colors.amber[100] : Colors.green[100],
-                  trailing: TextButton(
-                    onPressed: () {
-                      ref
-                          .read(postProvider.notifier)
-                          .deletePost(data[index].id);
-                    },
-                    child: const Text("Delete"),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              FormUpdatePost(id: data[index].id!)),
-                    );
-                  },
-                );
-              },
-            );
-          },
-          error: (error, stack) => Text(error.toString()),
-          loading: () => const CircularProgressIndicator(),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.refresh(postListProvider);
+          await ref.read(postListProvider.future);
+        },
+        child: Center(
+          child: data.when(
+            data: (data) {
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    title: Text(data[index].title!),
+                    subtitle: Text(data[index].body!),
+                    tileColor:
+                        index % 2 == 0 ? Colors.amber[100] : Colors.green[100],
+                    trailing: TextButton(
+                      onPressed: () => deletePost(data[index].id),
+                      child: const Text("Delete"),
+                    ),
+                    onTap: () => navigateToFormUpdate(data[index].id),
+                  );
+                },
+              );
+            },
+            error: (error, stack) => Text(error.toString()),
+            loading: () => const CircularProgressIndicator(),
+          ),
         ),
       ),
     );

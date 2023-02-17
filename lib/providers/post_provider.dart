@@ -31,7 +31,24 @@ final postDetailProvider = FutureProvider.autoDispose.family((ref, id) {
   return PostService().getPostDetail(id);
 });
 
-final postProvider =
-    StateNotifierProvider.autoDispose<PostService, List<Post>>((ref) {
-  return PostService();
+class PostNotifier extends StateNotifier<List<Post>> {
+  PostNotifier():super([]);
+
+  final _postService = PostService();
+
+  void addPost(title, body) {
+    _postService.addPost(title, body);
+  }
+
+  void deletePost(id) {
+    _postService.deletePost(id);
+  }
+
+  void updatePost(id, title, body) {
+    _postService.updatePost(id, title, body);
+  }
+}
+
+final postNotifierData = StateNotifierProvider<PostNotifier, List<Post>>((ref) {
+  return PostNotifier();
 });

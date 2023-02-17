@@ -14,6 +14,20 @@ class _FormAddPostState extends ConsumerState<FormAddPost> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
 
+  void addPost() {
+    ref
+        .read(postNotifierData.notifier)
+        .addPost(_titleController.text, _bodyController.text);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const PostListScreen();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,19 +61,7 @@ class _FormAddPostState extends ConsumerState<FormAddPost> {
               height: 5,
             ),
             TextButton(
-              onPressed: () => {
-                ref
-                    .read(postProvider.notifier)
-                    .addPost(_titleController.text, _bodyController.text),
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const PostListScreen();
-                    },
-                  ),
-                ),
-              },
+              onPressed: () => addPost(),
               child: const Text("Submit"),
             )
           ],

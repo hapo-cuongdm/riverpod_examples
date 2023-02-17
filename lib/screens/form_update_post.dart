@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_examples/providers/post_provider.dart';
+import 'package:riverpod_examples/screens/post_list_screen.dart';
 
 class FormUpdatePost extends ConsumerStatefulWidget {
   final String id;
@@ -16,6 +17,20 @@ class FormUpdatePost extends ConsumerStatefulWidget {
 class _FormUpdatePostState extends ConsumerState<FormUpdatePost> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
+
+  void updatePost() {
+    ref
+        .read(postNotifierData.notifier)
+        .updatePost(widget.id, _titleController.text, _bodyController.text);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const PostListScreen();
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +72,7 @@ class _FormUpdatePostState extends ConsumerState<FormUpdatePost> {
                   height: 5,
                 ),
                 TextButton(
-                    onPressed: () {
-                      ref.read(postProvider.notifier).updatePost(widget.id,
-                          _titleController.text, _bodyController.text);
-                    },
-                    child: const Text("Update"))
+                    onPressed: () => updatePost(), child: const Text("Update"))
               ],
             ),
           );

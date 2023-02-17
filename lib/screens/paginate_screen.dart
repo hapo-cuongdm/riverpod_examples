@@ -19,6 +19,10 @@ class PaginateScreen extends ConsumerWidget {
       ref.read(pageIndexProvider.notifier).update((state) => state + 1);
     }
 
+    void updatePaginate() {
+      ref.read(pageIndexProvider.notifier).update((state) => state + 2);
+    }
+
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -44,6 +48,8 @@ class PaginateScreen extends ConsumerWidget {
               ),
             ],
           ),
+          TextButton(
+              onPressed: () => updatePaginate(), child: const Text('Update'))
         ],
       ),
     );

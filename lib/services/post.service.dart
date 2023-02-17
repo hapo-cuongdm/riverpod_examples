@@ -1,39 +1,44 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_examples/constants/app_constants.dart';
 import 'package:riverpod_examples/models/post.dart';
 
-class PostService extends StateNotifier<List<Post>> {
-  PostService() : super([]);
-
+class PostService {
   final url = AppConstants.apiUrl;
-  Future<List<Post>> getPostList() async {
-    Response response = await Dio().get('$url/posts');
 
-    if (response.statusCode == 200) {
-      // final List result = jsonDecode(response.data);
-      // return result.map((e) => Post.fromJson(e)).toList();
+  Future<List<Post>> getPostList() async {
+    try {
+      Response response = await Dio().get('$url/posts');
+      // final result = jsonDecode(response.data) as List;
+      // final posts = result.map((e) {
+      //   return Post.fromJson(e);
+      // }).toList();
       List<Post> posts = [];
       for (var item in response.data) {
         posts.add(Post.fromJson(item));
       }
       return posts;
-    } else {
-      throw Exception("error api");
+    } catch (err) {
+      throw Exception(err);
     }
   }
 
   Future<Response> addPost(title, body) async {
-    final response =
-        await Dio().post('$url/posts', data: {'title': title, 'body': body});
-    return response;
+    try {
+      final response =
+          await Dio().post('$url/posts', data: {'title': title, 'body': body});
+      return response;
+    } catch (err) {
+      throw Exception(err);
+    }
   }
 
   Future<Response> deletePost(id) async {
-    final response = await Dio().delete('$url/posts/$id');
-    return response;
+    try {
+      final response = await Dio().delete('$url/posts/$id');
+      return response;
+    } catch (err) {
+      throw Exception(err);
+    }
   }
 
   Future<Post> getPostDetail(id) async {
@@ -42,16 +47,20 @@ class PostService extends StateNotifier<List<Post>> {
       Post post = Post(id: '', title: '', body: '');
       if (response.statusCode == 200) post = Post.fromJson(response.data);
       return post;
-    } catch (e) {
-      throw Exception(e);
+    } catch (err) {
+      throw Exception(err);
     }
   }
 
   Future<Response> updatePost(id, title, body) async {
-    final response = await Dio().put('$url/posts/$id', data: {
-      'title': title,
-      'body': body,
-    });
-    return response;
+    try {
+      final response = await Dio().put('$url/posts/$id', data: {
+        'title': title,
+        'body': body,
+      });
+      return response;
+    } catch (err) {
+      throw Exception(err);
+    }
   }
 }
